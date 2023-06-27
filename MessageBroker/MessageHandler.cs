@@ -5,6 +5,7 @@ using Newtonsoft.Json;
 using RabbitMQ.Client;
 using RabbitMQ.Client.Events;
 using System.Text;
+using Microsoft.EntityFrameworkCore;
 
 namespace ReviewService.MessageBroker
 {
@@ -49,14 +50,9 @@ namespace ReviewService.MessageBroker
                 {
                     IEnumerable<Review>? reviews = _serviceContext.Reviews.Where(review => review.ProductId == productDeleted.Id);
 
-                    if (reviews.Any())
-                    {
-                        foreach (Review review in reviews)
-                        {
-                            _serviceContext.Reviews.Remove(review);
-                            await _serviceContext.SaveChangesAsync();
-                        }
-                    }
+                    _serviceContext.Reviews.RemoveRange(reviews);
+
+                    await _serviceContext.SaveChangesAsync();
 
                 // Acknowledge the message
                 _channel.BasicAck(eventArgs.DeliveryTag, multiple: false);
