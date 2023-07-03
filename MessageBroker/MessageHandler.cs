@@ -35,8 +35,28 @@ namespace ReviewService.MessageBroker
 
             Console.WriteLine($"message received from queue {message}");
 
-            Message<T>? eventMessage = JsonConvert.DeserializeObject<Message<T>>(message);
+            Message? eventMessage = JsonConvert.DeserializeObject<Message>(message);
 
+            //check if this message is already processed
+            if( eventMessage != null )
+            {
+                string consumerId = "review-service";
+                bool alreadyProcessed = await _serviceContext.ConsumedMessages.AnyAsync(message => message.Id == eventMessage.Id
+                && message.ConsumerId == consumerId);
+
+                if (alreadyProcessed) return;
+
+                try
+                {
+                    ConsumedMessage consumedMessage = new ConsumedMessage(eventMessage.Id, consumerId);
+                    await _serviceContext.AddAsync(consumedMessage);
+                    await _serviceContext.SaveChangesAsync();
+
+                }catch(Exception ex)
+                {
+                    Console.WriteLine(ex.Message);
+                }
+            }
             // Perform the message handling logic here based on the event message
          
 
@@ -44,7 +64,7 @@ namespace ReviewService.MessageBroker
             {
                 // Handle the PRODUCT_DELETED event
                 // ...
-                Product productDeleted = eventMessage.Payload;
+                Product productDeleted =JsonConvert.DeserializeObject<Product> (eventMessage.Payload);
 
                 try
                 {

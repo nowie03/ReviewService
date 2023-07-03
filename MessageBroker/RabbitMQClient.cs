@@ -48,7 +48,8 @@ namespace ReviewService.MessageBroker
                 //Here we create channel with session and model
                 _channel = _connection.CreateModel();
                 //declare the queue after mentioning name and a few property related to that
-                _channel.QueueDeclare(_queueName, exclusive: false);
+                //_channel.QueueDeclare(_queueName, exclusive: false);
+
 
                 _messageHandler = new(_channel, serviceProvider);
             }
@@ -57,14 +58,14 @@ namespace ReviewService.MessageBroker
                 Console.WriteLine(ex.ToString());
             }
         }
-        public void SendMessage<T>(T message, string eventType)
+        public void SendMessage(Message eventMessage)
         {
 
             //Serialize the message
             if (_channel == null)
                 return;
 
-            Message<T> eventMessage = new Message<T>(eventType, message);
+         
 
             string json = JsonConvert.SerializeObject(eventMessage);
 
