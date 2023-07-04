@@ -31,4 +31,4 @@ namespace ReviewService.Models
             State = state;
         }
     }
-    }
+}

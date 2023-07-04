@@ -1,11 +1,11 @@
-﻿using ReviewService.Constants;
-using ReviewService.Context;
-using ReviewService.Models;
+﻿using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
 using RabbitMQ.Client;
 using RabbitMQ.Client.Events;
+using ReviewService.Constants;
+using ReviewService.Context;
+using ReviewService.Models;
 using System.Text;
-using Microsoft.EntityFrameworkCore;
 
 namespace ReviewService.MessageBroker
 {
@@ -38,7 +38,7 @@ namespace ReviewService.MessageBroker
             Message? eventMessage = JsonConvert.DeserializeObject<Message>(message);
 
             //check if this message is already processed
-            if( eventMessage != null )
+            if (eventMessage != null)
             {
                 string consumerId = "review-service";
                 bool alreadyProcessed = await _serviceContext.ConsumedMessages.AnyAsync(message => message.Id == eventMessage.Id
@@ -52,19 +52,20 @@ namespace ReviewService.MessageBroker
                     await _serviceContext.AddAsync(consumedMessage);
                     await _serviceContext.SaveChangesAsync();
 
-                }catch(Exception ex)
+                }
+                catch (Exception ex)
                 {
                     Console.WriteLine(ex.Message);
                 }
             }
             // Perform the message handling logic here based on the event message
-         
 
-            if (eventMessage !=null && eventMessage.EventType == EventTypes.PRODUCT_DELETED)
+
+            if (eventMessage != null && eventMessage.EventType == EventTypes.PRODUCT_DELETED)
             {
                 // Handle the PRODUCT_DELETED event
                 // ...
-                Product productDeleted =JsonConvert.DeserializeObject<Product> (eventMessage.Payload);
+                Product productDeleted = JsonConvert.DeserializeObject<Product>(eventMessage.Payload);
 
                 try
                 {
@@ -74,8 +75,8 @@ namespace ReviewService.MessageBroker
 
                     await _serviceContext.SaveChangesAsync();
 
-                // Acknowledge the message
-                _channel.BasicAck(eventArgs.DeliveryTag, multiple: false);
+                    // Acknowledge the message
+                    _channel.BasicAck(eventArgs.DeliveryTag, multiple: false);
 
                 }
                 catch (Exception ex)

@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using ReviewService.Context;
 using ReviewService.Models;
@@ -25,10 +20,10 @@ namespace ReviewService.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Review>>> GetReviews()
         {
-          if (_context.Reviews == null)
-          {
-              return NotFound();
-          }
+            if (_context.Reviews == null)
+            {
+                return NotFound();
+            }
             return await _context.Reviews.ToListAsync();
         }
 
@@ -36,10 +31,10 @@ namespace ReviewService.Controllers
         [HttpGet("{id}")]
         public async Task<ActionResult<Review>> GetReview(int id)
         {
-          if (_context.Reviews == null)
-          {
-              return NotFound();
-          }
+            if (_context.Reviews == null)
+            {
+                return NotFound();
+            }
             var review = await _context.Reviews.FindAsync(id);
 
             if (review == null)
@@ -86,10 +81,10 @@ namespace ReviewService.Controllers
         [HttpPost]
         public async Task<ActionResult<Review>> PostReview(Review review)
         {
-          if (_context.Reviews == null)
-          {
-              return Problem("Entity set 'ServiceContext.Reviews'  is null.");
-          }
+            if (_context.Reviews == null)
+            {
+                return Problem("Entity set 'ServiceContext.Reviews'  is null.");
+            }
             _context.Reviews.Add(review);
             await _context.SaveChangesAsync();
 

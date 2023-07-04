@@ -3,7 +3,7 @@ using ReviewService.Models;
 
 namespace ReviewService.Context
 {
-    public class ServiceContext:DbContext
+    public class ServiceContext : DbContext
     {
         public ServiceContext(DbContextOptions options) : base(options) { }
 

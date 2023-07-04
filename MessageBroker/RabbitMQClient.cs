@@ -1,8 +1,8 @@
-﻿using ReviewService.Models;
-using Newtonsoft.Json;
+﻿using Newtonsoft.Json;
 using RabbitMQ.Client;
 using RabbitMQ.Client.Events;
 using RabbitMQ.Client.Exceptions;
+using ReviewService.Models;
 using System.Text;
 
 namespace ReviewService.MessageBroker
@@ -53,7 +53,7 @@ namespace ReviewService.MessageBroker
 
                 _messageHandler = new(_channel, serviceProvider);
             }
-            catch(BrokerUnreachableException ex)
+            catch (BrokerUnreachableException ex)
             {
                 Console.WriteLine(ex.ToString());
             }
@@ -65,7 +65,7 @@ namespace ReviewService.MessageBroker
             if (_channel == null)
                 return;
 
-         
+
 
             string json = JsonConvert.SerializeObject(eventMessage);
 

@@ -1,5 +1,5 @@
-﻿using ReviewService.MessageBroker;
-using RabbitMQ.Client.Exceptions;
+﻿using RabbitMQ.Client.Exceptions;
+using ReviewService.MessageBroker;
 using System.Collections.Concurrent;
 
 namespace ReviewService.BackgroundServices
