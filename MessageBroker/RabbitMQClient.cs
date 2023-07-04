@@ -82,6 +82,8 @@ namespace ReviewService.MessageBroker
             if (_channel == null)
                 return;
 
+           
+
             var consumer = new EventingBasicConsumer(_channel);
             consumer.Received += _messageHandler.HandleMessage;
             //read the message

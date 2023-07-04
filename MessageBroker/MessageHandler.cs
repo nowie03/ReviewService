@@ -38,7 +38,7 @@ namespace ReviewService.MessageBroker
             Message? eventMessage = JsonConvert.DeserializeObject<Message>(message);
 
             //check if this message is already processed
-            if (eventMessage != null)
+            if (eventMessage != null && eventMessage.EventType == EventTypes.PRODUCT_DELETED)
             {
                 string consumerId = "review-service";
                 bool alreadyProcessed = await _serviceContext.ConsumedMessages.AnyAsync(message => message.Id == eventMessage.Id
