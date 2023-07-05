@@ -18,13 +18,13 @@ namespace ReviewService.Controllers
 
         // GET: api/Reviews
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Review>>> GetReviews()
+        public async Task<ActionResult<IEnumerable<Review>>> GetReviews(int productID)
         {
             if (_context.Reviews == null)
             {
                 return NotFound();
             }
-            return await _context.Reviews.ToListAsync();
+            return await _context.Reviews.Where(review=>review.ProductId==productID).AsNoTracking().ToListAsync();
         }
 
         // GET: api/Reviews/5
