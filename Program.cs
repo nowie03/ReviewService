@@ -32,6 +32,14 @@ namespace ReviewService
 
             // Configure the HTTP request pipeline.
 
+            using (var scope = app.Services.CreateScope())
+            {
+                var dbContext = scope.ServiceProvider.GetRequiredService<ServiceContext>();
+                dbContext.Database.Migrate();
+
+                // use context
+            }
+
             app.UseSwagger();
             app.UseSwaggerUI();
 
